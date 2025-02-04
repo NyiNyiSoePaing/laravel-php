@@ -1,0 +1,60 @@
+FROM alpine:3.19
+LABEL maintainer="nyinyisoepaing1997@gmail.com"
+ENV COMPOSER_ALLOW_SUPERUSER=1
+# Setup document root
+WORKDIR /var/www/html
+
+# Install packages and remove default server definition
+RUN apk add --no-cache \
+  curl \
+  nginx \
+  php82 \
+  php82-ctype \
+  php82-curl \
+  php82-dom \
+  php82-fpm \
+  php82-gd \
+  php82-intl \
+  php82-mbstring \
+  php82-mysqli \
+  php82-opcache \
+  php82-openssl \
+  php82-phar \
+  php82-session \
+  php82-xml \
+  php82-xmlreader \
+  php82-pdo \
+  php82-pdo_pgsql \
+  php82-fileinfo \
+  php82-tokenizer \
+  php82-xmlwriter \
+  php82-xmlreader \
+  php82-pdo_mysql \
+  supervisor
+
+# Configure nginx
+COPY docker-config/nginx.conf /etc/nginx/nginx.conf
+
+# Configure PHP-FPM
+COPY docker-config/fpm-pool.conf /etc/php82/php-fpm.d/www.conf
+COPY docker-config/php.ini /etc/php82/conf.d/custom.ini
+
+# Configure supervisord
+COPY docker-config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Install composer 
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+# # Switch to use root user from here on
+USER root
+
+# set www-data group (82 is the standard uid/gid for www-data in Alpine)
+RUN set -x ; \
+	addgroup -g 82 -S www-data ; \
+	adduser -u 82 -D -S -G www-data www-data && exit 0 ; exit 1
+
+
+# Expose the port nginx is reachable on
+EXPOSE 80
+
+# Let supervisord start nginx & php-fpm
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
