@@ -4,6 +4,12 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 # Setup document root
 WORKDIR /var/www/html
 
+# Install packages                                                                                                 14:22:38
+
+# RUN apk add --no-cache \
+#   php82-ctype \
+#   php82-curl 
+
 # Configure nginx
 COPY docker-config/nginx.conf /etc/nginx/nginx.conf
 

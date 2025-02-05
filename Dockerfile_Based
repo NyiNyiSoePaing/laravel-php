@@ -4,14 +4,15 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 # Setup document root
 WORKDIR /var/www/html
 
-# Install packages and remove default server definition
 RUN apk add --no-cache \
   curl \
   nginx \
+  supervisor \
   php81 \
   php81-ctype \
   php81-curl \
   php81-dom \
+  php81-fileinfo \
   php81-fpm \
   php81-gd \
   php81-intl \
@@ -19,18 +20,17 @@ RUN apk add --no-cache \
   php81-mysqli \
   php81-opcache \
   php81-openssl \
+  php81-pdo \
+  php81-pdo_mysql \
+  php81-pdo_pgsql \
   php81-phar \
   php81-session \
+  php81-simplexml \
+  php81-sodium \
+  php81-tokenizer \
   php81-xml \
   php81-xmlreader \
-  php81-pdo \
-  php81-pdo_pgsql \
-  php81-fileinfo \
-  php81-tokenizer \
-  php81-xmlwriter \
-  php81-xmlreader \
-  php81-pdo_mysql \
-  supervisor
+  php81-xmlwriter
 
 # Create symlink so programs depending on `php` still function
 RUN ln -s /usr/bin/php81 /usr/bin/php
