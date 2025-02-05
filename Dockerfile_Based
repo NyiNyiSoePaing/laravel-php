@@ -8,10 +8,12 @@ WORKDIR /var/www/html
 RUN apk add --no-cache \
   curl \
   nginx \
+  supervisor \
   php82 \
   php82-ctype \
   php82-curl \
   php82-dom \
+  php82-fileinfo \
   php82-fpm \
   php82-gd \
   php82-intl \
@@ -19,18 +21,17 @@ RUN apk add --no-cache \
   php82-mysqli \
   php82-opcache \
   php82-openssl \
+  php82-pdo \
+  php82-pdo_mysql \
+  php82-pdo_pgsql \
   php82-phar \
   php82-session \
+  php82-simplexml \
+  php82-sodium \
+  php82-tokenizer \
   php82-xml \
   php82-xmlreader \
-  php82-pdo \
-  php82-pdo_pgsql \
-  php82-fileinfo \
-  php82-tokenizer \
-  php82-xmlwriter \
-  php82-xmlreader \
-  php82-pdo_mysql \
-  supervisor
+  php82-xmlwriter
 
 # Configure nginx
 COPY docker-config/nginx.conf /etc/nginx/nginx.conf
